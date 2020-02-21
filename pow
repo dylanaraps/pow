@@ -59,6 +59,15 @@ main() {
         # recommend against tweaking this full stop. For the
         # above reason, this is disabled by default.
         # swap 6000 3000 /proc/sys/vm/dirty_expire_centisecs
+
+        # How often the pdflush, flush and kdmflush processes
+        # wake up check to see if they have work which needs
+        # to be done. Setting this to '0' disables the above
+        # behavior.
+        #
+        # Red Hat recommends against tweaking this. Do with
+        # this information what you will.
+        # swap 0 500 /proc/sys/vm/dirty_writeback_centisecs
     }
 }
 
