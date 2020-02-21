@@ -98,12 +98,6 @@ main() {
         done
     }
 
-    log -\> Tweaking audio card power saving; {
-        # TODO: Non-intel devices.
-        swap 1 0 /sys/module/snd_hda_intel/parameters/power_save
-        swap 1 0 /sys/module/snd_hda_intel/parameters/power_save_controller
-    }
-
     log -\> Tweaking ASPM; {
         # WARNING: This may cause a system hang if ASPM isn't
         #          supported by your hardware.
