@@ -24,7 +24,7 @@ main() {
     # If an invalid mode was given as input, rerun main()
     # with no argument to display the above usage message.
     [ "$mode" = bat ] || [ "$mode" = pow ] ||
-       main ""
+        main ""
 
     log -\> Tweaking virtual memory for "$1"; {
         # How often the kernel will swap physical memory
