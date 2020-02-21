@@ -25,9 +25,9 @@ main() {
        main ""
 
     log -\> Tweaking virtual memory for "$1"; {
-        # Control how often the kernel will swap physical
-        # memory to the disk. The higher the value, the
-        # more swaps will occur.
+        # How often the kernel will swap physical memory
+        # to the disk. The higher the value, the more
+        # swaps will occur.
         #
         # Leave this set at '10' regardless of power mode.
         # The default is typically '60' for laptop/desktop
