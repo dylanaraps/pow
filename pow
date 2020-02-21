@@ -57,9 +57,17 @@ main() {
         #
         # kernel.org/doc/Documentation/laptops/laptop-mode.txt
         swap 5 0 /proc/sys/vm/laptop_mode
+
+        # The kernel flusher threads will periodically wake up
+        # and write old data out to disk. This controls how
+        # often this happens.
+        #
+        # Set to '1500' on battery as per powertop
+        # recommendations.
+        swap 1500 500 /proc/sys/vm/dirty_writeback_centisecs
     }
 
-    log -\> Tweaking CPU governor; {
+    log -\> Tweaking CPU governor/scheduler; {
         # Set the CPU governor to 'ondemand' when running on
         # battery and 'performance' when running on power.
         #
@@ -68,6 +76,10 @@ main() {
         for cpu in /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor; do
             swap ondemand performance "$cpu"
         done
+
+        # Power aware CPU scheduler. Not all systems have
+        # this. pow will silently skip changing this option.
+        swap 1 0 /sys/devices/system/cpu/sched_mc_power_savings
     }
 
     log -\> Tweaking SCSI link power policy; {
@@ -78,20 +90,18 @@ main() {
         done
     }
 
-    log -\> Tweaking USB/PCI auto-suspend; {
+    log -\> Tweaking USB/PCI/I2C auto-suspend; {
         # TODO: Docs needed for this. Self explanatory.
         for dev in /sys/bus/usb/devices/*/power/control \
-                   /sys/bus/pci/devices/*/power/control; do
+                   /sys/bus/pci/devices/*/power/control \
+                   /sys/bus/i2c/devices/*/power/control; do
             swap auto on "$dev"
         done
     }
 
     log -\> Tweaking audio card power saving; {
         # TODO: Non-intel devices.
-        #
-        # WARNING: This may cause the program to hang
-        #          depending on your hardware.
-        # swap 5 0 /sys/module/snd_hda_intel/parameters/power_save
+        swap 1 0 /sys/module/snd_hda_intel/parameters/power_save
         swap 1 0 /sys/module/snd_hda_intel/parameters/power_save_controller
     }
 
@@ -125,7 +135,17 @@ main() {
         rfkill list bluetooth
     }
 
-    log -\> Tweaking miscellaneous; {
+    log -\> Tweaking wake on lan; {
+        # TODO: Find portable method of doing this.
+        :
+    }
+
+    log -\> Tweaking Wifi powersave; {
+        # TODO: Find portable method of doing this.
+        :
+    }
+
+    log -\> Tweaking kernel watchdog; {
         # Disable the kernel watchdog when on battery.
         #
         # This disables periodic interrupts which the kernel
