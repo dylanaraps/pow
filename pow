@@ -53,6 +53,17 @@ main() {
         # kernel.org/doc/Documentation/laptops/laptop-mode.txt
         swap 5 0 /proc/sys/vm/laptop_mode
     }
+
+    log -\> Tweaking miscellaneous for "$1"; {
+        # Disable the kernel watchdog when on battery.
+        #
+        # This disables periodic interrupts which the kernel
+        # uses to monitor whether any CPU has locked up and
+        # and print debug messages if so.
+        #
+        # Some users will always leave this disabled.
+        swap 0 1 /proc/sys/kernel/nmi_watchdog
+    }
 }
 
 main "$@"
