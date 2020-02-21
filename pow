@@ -17,17 +17,18 @@ swap() {
 }
 
 main() {
+    # Require root to run pow. Simply unset all arguments
+    # so the usage error is triggered below.
+    [ "$(id -u)" = 0 ] ||
+        set --
+
     # Store the desired mode. If empty (no passed arg),
     # exit displaying usage.
     mode=${1:?Usage: ${0##*/} bat|pow}
 
     # If an invalid mode was given as input, rerun main()
     # with no argument to display the above usage message.
-    #
-    # Do the same if the user is not root as we need root
-    # permissions to change all of the settings.
     [ "$mode" = bat ]  || [ "$mode" = pow ] ||
-    [ "$(id -u)" = 0 ] ||
         main ""
 
     log -\> Tweaking virtual memory; {
@@ -80,8 +81,15 @@ main() {
         # TODO: Docs needed for this. Self explanatory.
         for dev in /sys/bus/usb/devices/*/power/level \
                    /sys/bus/pci/devices/*/power/control; do
-            swap off on "$dev"
+            swap auto on "$dev"
         done
+    }
+
+    log -\> Tweaking audio card power saving; {
+        # TODO: Docs needed for this. Self explanatory.
+        # TODO: Non-intel devices.
+        swap 5 0 /sys/module/snd_hda_intel/parameters/power_save
+        swap 1 0 /sys/module/snd_hda_intel/parameters/power_save_controller
     }
 
     log -\> Tweaking miscellaneous; {
