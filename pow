@@ -83,17 +83,17 @@ main() {
     }
 
     log -\> Tweaking SCSI link power policy; {
-        # WARNING: min_power may cause data loss. The value
-        #          is set to medium as recommended.
         for cpu in /sys/class/scsi_host/host*/link_power_management_policy; do
-            swap med_power_with_dipm max_performance "$cpu"
+            swap min_power max_performance "$cpu"
         done
     }
 
-    log -\> Tweaking USB/PCI/I2C auto-suspend; {
+    log -\> Tweaking device auto-suspend; {
         for dev in /sys/bus/usb/devices/*/power/control \
                    /sys/bus/pci/devices/*/power/control \
-                   /sys/bus/i2c/devices/*/power/control; do
+                   /sys/bus/pci/devices/*/ata[0-9]*/power/control \
+                   /sys/bus/i2c/devices/*/power/control \
+                   /sys/block/*/power/control; do
             swap auto on "$dev"
         done
     }
