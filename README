@@ -1,3 +1,17 @@
-POW (NAME PENDING)
+POW - Simple laptop power management.
 
-Simple laptop power management.
+This program has two commands, 'pow bat' for swapping to
+battery mode and 'pow pow' for swapping to power (or AC)
+mode.
+
+How exactly this utility runs is up to you, the user.
+All this program does is provide the switching mechanism.
+
+All powertop tunables passed in testing on my machine.
+There may be missing rules for hardware I do not own.
+Please open an issue with powertop output and I'll add
+support.
+
+There is no configuration file. Simply edit the program
+to enable/disable the functionality you require.
+It's tiny in size.
