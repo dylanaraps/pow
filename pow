@@ -87,9 +87,11 @@ main() {
     }
 
     log -\> Tweaking audio card power saving; {
-        # TODO: Docs needed for this. Self explanatory.
         # TODO: Non-intel devices.
-        swap 5 0 /sys/module/snd_hda_intel/parameters/power_save
+        #
+        # WARNING: This may cause the program to hang
+        #          depending on your hardware.
+        # swap 5 0 /sys/module/snd_hda_intel/parameters/power_save
         swap 1 0 /sys/module/snd_hda_intel/parameters/power_save_controller
     }
 
@@ -99,6 +101,17 @@ main() {
         #
         # WARNING: Comment this out if that is the case.
         swap powersave performance /sys/module/pcie_aspm/parameters/policy
+    }
+
+    log -\> Tweaking display brightness; {
+        # Set the brightness to '80%' of the maximum when on
+        # battery. Change the '8' if you'd like to lower the
+        # brightness further.
+        for mon in /sys/class/backlight/*/; do
+            read -r max < "$mon/max_brightness"
+
+            swap "$((max * 8 / 10))" "$max" > "$mon/brightness"
+        done
     }
 
     log -\> Tweaking miscellaneous; {
