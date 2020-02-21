@@ -42,18 +42,18 @@ main() {
         # and more today.
         #
         # For reference, on server and hypervisor workloads
-        # this is usually set to '0'. Users of systems with
-        # a good amount of ram and an SSD sometimes set this
-        # to '1' to increase the lifespan of the SSD.
+        # this is usually set to '0'. Users of systems
+        # with a good amount of ram and an SSD sometimes
+        # set this to '1' to increase the lifespan of SSDs.
         #
         # This has the potential to improve performance
-        # though this is on a case-by-case basis and depends
-        # on the system and its workloads.
+        # though this is on a case-by-case basis and
+        # depends on the system and its workloads.
         swap 10 10 /proc/sys/vm/swappiness
 
         # Let's not touch any other settings in /proc/sys/vm/
-        # and instead toggle the kernel's built in laptop mode
-        # to handle them for us.
+        # and instead toggle the kernel's built in laptop
+        # mode to handle them for us.
         #
         # kernel.org/doc/Documentation/laptops/laptop-mode.txt
         swap 5 0 /proc/sys/vm/laptop_mode
