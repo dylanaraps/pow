@@ -15,12 +15,20 @@ swap() {
 }
 
 main() {
+    # Store the desired mode. If empty (no passed arg),
+    # exit displaying usage.
     mode=${1:?Usage: ${0##*/} bat|pow}
 
+    # If an invalid mode was given as input, rerun main()
+    # with no argument to display the above usage message.
     [ "$mode" = bat ] || [ "$mode" = pow ] ||
        main ""
 
     log -\> Tweaking virtual memory for "$1"; {
+        # Control how often the kernel will swap physical
+        # memory to the disk. The higher the value, the
+        # more swaps will occur.
+        #
         # Leave this set at '10' regardless of power mode.
         # The default is typically '60' for laptop/desktop
         # workloads though '10' is being recommended more
@@ -34,11 +42,21 @@ main() {
         # This has the potential to improve performance
         # though this is on a case-by-case basis and depends
         # on the system and its workloads.
-        #
-        # Allowed values:
-        # min (0):   Avoid swapping as long as possible.
-        # max (100): Aggressively swap processes out of memory.
         swap 10 10 /proc/sys/vm/swappiness
+
+        # How often the kernel should write eligible data to
+        # the disk (in centiseconds). Setting to '0' disables
+        # the periodic writes.
+        #
+        # The kernel laptop mode patches set this to a value
+        # of '6000' by default. This value is (SECONDS * 100)
+        # and if the devices loses power, SECONDS amount of
+        # data is potentially lost.
+        #
+        # Various documents, guides or what have you
+        # recommend against tweaking this full stop. For the
+        # above reason, this is disabled by default.
+        # swap 6000 3000 /proc/sys/vm/dirty_expire_centisecs
     }
 }
 
