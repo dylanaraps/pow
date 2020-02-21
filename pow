@@ -9,10 +9,11 @@ log() {
 swap() {
     # Swap between two values based on mode.
     # Usage: swap bat_val pow_val dest_file.
-    [ "$mode" = bat ] && val=$1 || val=$2
+    [ "$mode" = bat ] || set -- "$2" "" "$3"
+    [ -f "$3" ]       || return 0
 
-    printf %s "$val" 2>/dev/null > "$3" &&
-        log Changed "$3" to "$val"
+    printf %s "$1" 2>/dev/null > "$3" || return 0
+    log Changed "$3" to "$1"
 }
 
 main() {
@@ -61,6 +62,21 @@ main() {
         # 'ondemand' by default regardless of mode.
         for cpu in /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor; do
             swap ondemand performance "$cpu"
+        done
+    }
+
+    log -\> Tweaking SCSI link power policy; {
+        # TODO: Docs needed for this. Self explanatory.
+        for cpu in /sys/class/scsi_host/host*/link_power_management_policy; do
+            swap min_power max_performance "$cpu"
+        done
+    }
+
+    log -\> Tweaking USB/PCI auto-suspend; {
+        # TODO: Docs needed for this. Self explanatory.
+        for dev in /sys/bus/usb/devices/*/power/level \
+                   /sys/bus/pci/devices/*/power/control; do
+            swap off on "$dev"
         done
     }
 
