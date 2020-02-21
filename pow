@@ -1,0 +1,45 @@
+#!/bin/sh -e
+#
+# lapstop - Simple laptop power management.
+
+log() {
+    printf '%s\n' "$*"
+}
+
+swap() {
+    [ "$mode" = bat ] && val=$1 || val=$2
+
+    printf %s "$val" > "$3"
+
+    log Changed "$3" to "$val"
+}
+
+main() {
+    mode=${1:?Usage: ${0##*/} bat|pow}
+
+    [ "$mode" = bat ] || [ "$mode" = pow ] ||
+       main ""
+
+    log -\> Tweaking virtual memory for "$1"; {
+        # Leave this set at '10' regardless of power mode.
+        # The default is typically '60' for laptop/desktop
+        # workloads though '10' is being recommended more
+        # and more today.
+        #
+        # For reference, on server and hypervisor workloads
+        # this is usually set to '0'. Users of systems with
+        # a good amount of ram and an SSD sometimes set this
+        # to '1' to increase the lifespan of the SSD.
+        #
+        # This has the potential to improve performance
+        # though this is on a case-by-case basis and depends
+        # on the system and its workloads.
+        #
+        # Allowed values:
+        # min (0):   Avoid swapping as long as possible.
+        # max (100): Aggressively swap processes out of memory.
+        swap 10 10 /proc/sys/vm/swappiness
+    }
+}
+
+main "$@"
