@@ -123,6 +123,17 @@ main() {
         done
     }
 
+    # log -\> Turning Wifi off/on; {
+    #     # Self explanatory. Uncomment to enable the
+    #     # behavior.
+    #     case $mode in
+    #         bat) rfkill block   wlan ;;
+    #         pow) rfkill unblock wlan ;;
+    #     esac
+
+    #     rfkill list wlan
+    # } ||:
+
     log -\> Turning bluetooth off/on; {
         # Self explanatory. Comment this out to disable the
         # behavior.
@@ -132,17 +143,16 @@ main() {
         esac
 
         rfkill list bluetooth
-    }
+    } ||:
 
     log -\> Tweaking wake on lan; {
-        # TODO: Find portable method of doing this.
-        :
-    }
-
-    log -\> Tweaking Wifi powersave; {
-        # TODO: Find portable method of doing this.
-        :
-    }
+        # Let's always disable this regardless of mode.
+        # Comment this out or see the bluetooth section
+        # above for how to toggle it.
+        for dev in /sys/class/net/*; do
+            ethtool -s "$dev" wol d >/dev/null 2>&1
+        done
+    } ||:
 
     log -\> Tweaking kernel watchdog; {
         # Disable the kernel watchdog when on battery.
