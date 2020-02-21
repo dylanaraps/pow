@@ -91,7 +91,6 @@ main() {
     }
 
     log -\> Tweaking USB/PCI/I2C auto-suspend; {
-        # TODO: Docs needed for this. Self explanatory.
         for dev in /sys/bus/usb/devices/*/power/control \
                    /sys/bus/pci/devices/*/power/control \
                    /sys/bus/i2c/devices/*/power/control; do
