@@ -51,13 +51,6 @@ main() {
         # depends on the system and its workloads.
         swap 10 10 /proc/sys/vm/swappiness
 
-        # Let's not touch any other settings in /proc/sys/vm/
-        # and instead toggle the kernel's built in laptop
-        # mode to handle them for us.
-        #
-        # kernel.org/doc/Documentation/laptops/laptop-mode.txt
-        swap 5 0 /proc/sys/vm/laptop_mode
-
         # The kernel flusher threads will periodically wake up
         # and write old data out to disk. This controls how
         # often this happens.
@@ -65,6 +58,13 @@ main() {
         # Set to '1500' on battery as per powertop
         # recommendations.
         swap 1500 500 /proc/sys/vm/dirty_writeback_centisecs
+
+        # Let's not touch any other settings in /proc/sys/vm/
+        # and instead toggle the kernel's built in laptop
+        # mode to handle them for us.
+        #
+        # kernel.org/doc/Documentation/laptops/laptop-mode.txt
+        swap 5 0 /proc/sys/vm/laptop_mode
     }
 
     log -\> Tweaking CPU governor/scheduler; {
