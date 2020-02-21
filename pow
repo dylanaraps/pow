@@ -11,9 +11,8 @@ swap() {
     # Usage: swap bat_val pow_val dest_file.
     [ "$mode" = bat ] && val=$1 || val=$2
 
-    printf %s "$val" > "$3"
-
-    log Changed "$3" to "$val"
+    printf %s "$val" 2>/dev/null > "$3" &&
+        log Changed "$3" to "$val"
 }
 
 main() {
@@ -26,7 +25,7 @@ main() {
     [ "$mode" = bat ] || [ "$mode" = pow ] ||
         main ""
 
-    log -\> Tweaking virtual memory for "$1"; {
+    log -\> Tweaking virtual memory; {
         # How often the kernel will swap physical memory
         # to the disk. The higher the value, the more
         # swaps will occur.
@@ -54,7 +53,18 @@ main() {
         swap 5 0 /proc/sys/vm/laptop_mode
     }
 
-    log -\> Tweaking miscellaneous for "$1"; {
+    log -\> Tweaking CPU governor; {
+        # Set the CPU governor to 'ondemand' when running on
+        # battery and 'performance' when running on power.
+        #
+        # Most distributions today will leave the system on
+        # 'ondemand' by default regardless of mode.
+        for cpu in /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor; do
+            swap ondemand performance "$cpu"
+        done
+    }
+
+    log -\> Tweaking miscellaneous; {
         # Disable the kernel watchdog when on battery.
         #
         # This disables periodic interrupts which the kernel
