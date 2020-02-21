@@ -114,6 +114,17 @@ main() {
         done
     }
 
+    log -\> Turning bluetooth off/on; {
+        # Self explanatory. Comment this out to disable the
+        # behavior.
+        case $mode in
+            bat) rfkill block   bluetooth ;;
+            pow) rfkill unblock bluetooth ;;
+        esac
+
+        rfkill list bluetooth
+    }
+
     log -\> Tweaking miscellaneous; {
         # Disable the kernel watchdog when on battery.
         #
