@@ -7,6 +7,8 @@ log() {
 }
 
 swap() {
+    # Swap between two values based on mode.
+    # Usage: swap bat_val pow_val dest_file.
     [ "$mode" = bat ] && val=$1 || val=$2
 
     printf %s "$val" > "$3"
