@@ -71,15 +71,16 @@ main() {
     }
 
     log -\> Tweaking SCSI link power policy; {
-        # TODO: Docs needed for this. Self explanatory.
+        # WARNING: min_power may cause data loss. The value
+        #          is set to medium as recommended.
         for cpu in /sys/class/scsi_host/host*/link_power_management_policy; do
-            swap min_power max_performance "$cpu"
+            swap med_power_with_dipm max_performance "$cpu"
         done
     }
 
     log -\> Tweaking USB/PCI auto-suspend; {
         # TODO: Docs needed for this. Self explanatory.
-        for dev in /sys/bus/usb/devices/*/power/level \
+        for dev in /sys/bus/usb/devices/*/power/control \
                    /sys/bus/pci/devices/*/power/control; do
             swap auto on "$dev"
         done
@@ -90,6 +91,14 @@ main() {
         # TODO: Non-intel devices.
         swap 5 0 /sys/module/snd_hda_intel/parameters/power_save
         swap 1 0 /sys/module/snd_hda_intel/parameters/power_save_controller
+    }
+
+    log -\> Tweaking ASPM; {
+        # WARNING: This may cause a system hang if ASPM isn't
+        #          supported by your hardware.
+        #
+        # WARNING: Comment this out if that is the case.
+        swap powersave performance /sys/module/pcie_aspm/parameters/policy
     }
 
     log -\> Tweaking miscellaneous; {
