@@ -1,6 +1,6 @@
 #!/bin/sh -e
 #
-# lapstop - Simple laptop power management.
+# pow - Simple laptop power management.
 
 log() {
     printf '%s\n' "$*"
