@@ -23,7 +23,11 @@ main() {
 
     # If an invalid mode was given as input, rerun main()
     # with no argument to display the above usage message.
-    [ "$mode" = bat ] || [ "$mode" = pow ] ||
+    #
+    # Do the same if the user is not root as we need root
+    # permissions to change all of the settings.
+    [ "$mode" = bat ]  || [ "$mode" = pow ] ||
+    [ "$(id -u)" = 0 ] ||
         main ""
 
     log -\> Tweaking virtual memory; {
