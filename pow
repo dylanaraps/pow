@@ -46,28 +46,12 @@ main() {
         # on the system and its workloads.
         swap 10 10 /proc/sys/vm/swappiness
 
-        # How often the kernel should write eligible data to
-        # the disk (in centiseconds). Setting to '0' disables
-        # the periodic writes.
+        # Let's not touch any other settings in /proc/sys/vm/
+        # and instead toggle the kernel's built in laptop mode
+        # to handle them for us.
         #
-        # The kernel laptop mode patches set this to a value
-        # of '6000' by default. This value is (SECONDS * 100)
-        # and if the devices loses power, SECONDS amount of
-        # data is potentially lost.
-        #
-        # Various documents, guides or what have you
-        # recommend against tweaking this full stop. For the
-        # above reason, this is disabled by default.
-        # swap 6000 3000 /proc/sys/vm/dirty_expire_centisecs
-
-        # How often the pdflush, flush and kdmflush processes
-        # wake up check to see if they have work which needs
-        # to be done. Setting this to '0' disables the above
-        # behavior.
-        #
-        # Red Hat recommends against tweaking this. Do with
-        # this information what you will.
-        # swap 0 500 /proc/sys/vm/dirty_writeback_centisecs
+        # kernel.org/doc/Documentation/laptops/laptop-mode.txt
+        swap 5 0 /proc/sys/vm/laptop_mode
     }
 }
 
