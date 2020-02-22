@@ -130,10 +130,11 @@ main() {
 
     log -\> Turning bluetooth off/on; {
         # Self explanatory. Comment this out to disable the
-        # behavior.
+        # behavior. Change pow's rfkill command to unblock
+        # to enable bluetooth on power.
         case $mode in
-            bat) rfkill block   bluetooth ;;
-            pow) rfkill unblock bluetooth ;;
+            bat) rfkill block bluetooth ;;
+            pow) rfkill block bluetooth ;;
         esac
 
         rfkill list bluetooth
@@ -155,9 +156,9 @@ main() {
         # uses to monitor whether any CPU has locked up and
         # and print debug messages if so.
         #
-        # Some users will always leave this disabled. Change
-        # this to '0 0' if you'd like to do the same.
-        swap 0 1 /proc/sys/kernel/nmi_watchdog
+        # Set this to '0 1' to enable the kernel watchdog
+        # when on power. Default is always disabled.
+        swap 0 0 /proc/sys/kernel/nmi_watchdog
     }
 }
 
