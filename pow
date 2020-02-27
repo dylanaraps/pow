@@ -1,4 +1,4 @@
-#!/bin/sh -e
+#!/bin/sh
 #
 # pow - Simple laptop power management.
 
@@ -24,7 +24,7 @@ main() {
 
     # Store the desired mode. If empty (no passed arg),
     # exit displaying usage.
-    mode=${1:?Usage: ${0##*/} bat|pow}
+    mode=${1:?Usage: ${0##*/} bat|pow (run as root)}
 
     # If an invalid mode was given as input, rerun main()
     # with no argument to display the above usage message.
